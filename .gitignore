@@ -31,6 +31,11 @@ Desktop.ini
 /.wslconfig
 
 # IDE specific files
+/.idea
+/.idea/modules.xml
+/.idea/monday-startupforstartups.iml
+/.idea/php.xml
+/.idea/vcs.xml
 .idea
 .vscode
 
