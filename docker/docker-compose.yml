@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile # Adjust path to point to Dockerfile
+    container_name: laravel-app
+    volumes:
+      - ../:/var/www/html # Reference the project root from the parent directory
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:YOUR_APP_KEY
+    networks:
+      - laravel
+
+  webserver:
+    image: nginx:latest
+    container_name: laravel-webserver
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf # Nginx config in /docker folder
+      - ../:/var/www/html
+    ports:
+      - "80:80"
+    networks:
+      - laravel
+
+  db:
+    image: postgres:13
+    container_name: laravel-db
+    env_file:
+      - ./postgres.env # Environment variables for PostgreSQL in /docker folder
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - laravel
+
+volumes:
+  db_data:
+
+networks:
+  laravel:

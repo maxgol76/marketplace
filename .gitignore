@@ -19,7 +19,7 @@ Homestead.json
 # Docker
 docker-compose.override.yml
 docker-compose.local.yml
-docker-compose.yml
+#docker-compose.yml
 /.docker
 /.env.docker
 
