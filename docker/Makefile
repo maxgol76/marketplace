@@ -1,6 +1,6 @@
 # Variables
 DOCKER_COMPOSE = cd docker && docker-compose
-DOCKER_EXEC = $(DOCKER_COMPOSE) exec app
+DOCKER_EXEC = $(DOCKER_COMPOSE) exec -it laravel_app bash/sh
 
 # Default command: start the containers
 up:
