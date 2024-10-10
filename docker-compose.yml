@@ -5,12 +5,12 @@ services:
       dockerfile: ./docker/Dockerfile  # Path to Dockerfile in /docker folder
     container_name: laravel-app
     volumes:
-      - ./:/var/www/html                 # Mount project root directory
+      - ./laravel-app:/var/www/html                 # Mount project root directory
       - ./docker/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini  # Mount xdebug.ini file
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
-      - APP_KEY=base64:YOUR_APP_KEY
+      - APP_KEY
     ports:
       - "9000:9000"   # PHP-FPM
       - "9003:9003"   # Xdebug

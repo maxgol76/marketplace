@@ -44,3 +44,5 @@ test:
 # Clean up unused Docker images and containers
 clean:
 	docker system prune -a --volumes
+
+# docker exec -it laravel-app bash
