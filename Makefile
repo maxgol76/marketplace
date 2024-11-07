@@ -45,4 +45,3 @@ test:
 clean:
 	docker system prune -a --volumes
 
-# docker exec -it laravel-app bash

@@ -1,45 +1,21 @@
-# Laravel directories
-/vendor
+/.phpunit.cache
 /node_modules
+/public/build
+/public/hot
 /public/storage
 /storage/*.key
-/storage/debugbar
-/storage/framework/cache
-/storage/framework/sessions
-/storage/framework/views
-/storage/logs
-
-# Environment variables
-/.env
-/.env.*.local
-Homestead.yaml
+/vendor
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
 Homestead.json
-/vagrant
-
-# Docker
-docker-compose.override.yml
-docker-compose.local.yml
-#docker-compose.yml
-/.docker
-/.env.docker
-
-# Windows
-Thumbs.db
-Desktop.ini
-
-# WSL 2 (optional)
-/.wslconfig
-
-# IDE specific files
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.fleet
 /.idea
-/.idea/modules.xml
-/.idea/monday-startupforstartups.iml
-/.idea/php.xml
-/.idea/vcs.xml
-.idea
-.vscode
-
-# Composer & NPM
-/composer.lock
-/npm-debug.log
-/yarn-error.log
+/.vscode
+/.zed
