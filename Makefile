@@ -42,6 +42,8 @@ test:
 	$(DOCKER_COMPOSE) exec app ./vendor/bin/phpunit
 
 # Clean up unused Docker images and containers
+exec:
+	docker exec -it laravel-app bash
+
 clean:
 	docker system prune -a --volumes
-
