@@ -29,11 +29,15 @@ services:
     networks:
       - laravel
 
-  db:
+  laravel-db:
     image: postgres:13
     container_name: laravel-db
-    env_file:
-      - ./docker/postgres.env  # Path to Postgres environment variables
+    ports:
+        - "5432:5432"
+    environment:
+        POSTGRES_DB: marketplace
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: marketplace
     volumes:
       - db_data:/var/lib/postgresql/data
     networks:
