@@ -1,66 +1,245 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Marketplace Project
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is a Laravel 11-based marketplace application built with Docker and PostgreSQL. It features a modern authentication system via Jetstream (Livewire), supports role-based user management (Administrator, Seller, Buyer), and uses Vite for frontend asset compilation.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Laravel 11 + Jetstream (Livewire)
+- User registration, login, password reset
+- Email verification
+- Role-based access control (using Spatie Laravel-Permission)
+- PostgreSQL database
+- Dockerized development environment
+- Vite + Tailwind CSS for frontend
+- Xdebug integration
+- Makefile for easy Docker commands
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🧰 Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Docker Desktop
+- Node.js (18+) & npm (locally or in Docker)
+- Composer
+- Git
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## ⚙️ Setup Instructions
 
-## Laravel Sponsors
+### 1. Clone the Repository
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+git clone <your-repo-url> marketplace
+cd marketplace
+```
 
-### Premium Partners
+### 2. Copy the Environment File
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```bash
+cp .env.example .env
+```
 
-## Contributing
+### 3. Start Docker Containers
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+docker-compose up -d --build
+```
 
-## Code of Conduct
+### 4. Install PHP Dependencies
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+docker exec -it app composer install
+```
 
-## Security Vulnerabilities
+### 5. Generate Application Key
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+docker exec -it app php artisan key:generate
+```
 
-## License
+### 6. Run Migrations
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+docker exec -it app php artisan migrate
+```
+
+### 7. Install Frontend Dependencies
+
+On host (if Node.js installed locally):
+
+```bash
+npm install
+npm run dev
+```
+
+Or inside container:
+
+```bash
+docker exec -it node sh
+npm install
+npm run dev
+```
+
+---
+
+## 👥 User Roles
+
+This app supports three user roles (using Spatie Laravel-Permission):
+
+- `Administrator` – full access
+- `Seller` – can manage listings/products
+- `Buyer` – can browse and purchase
+
+To assign roles:
+
+```php
+$user->assignRole('admin');
+```
+
+To protect routes:
+
+```php
+Route::middleware(['role:admin'])->group(function () {
+    // Admin routes
+});
+```
+
+---
+
+## 🐳 Docker Commands via Makefile
+
+```bash
+make up        # docker-compose up -d --build
+make down      # docker-compose down
+make bash      # enter app container
+make logs      # view container logs
+```
+
+---
+
+## 🧠 Troubleshooting
+
+- **CSS not loading?**
+  - Make sure `npm run dev` is running
+  - Check Vite port and update `APP_URL` in `.env` (e.g. `http://127.0.0.1:5173`)
+
+- **Permissions error (laravel.log)?**
+  - Fix with:
+    ```bash
+    chmod -R 775 storage bootstrap/cache
+    chown -R www-data:www-data storage bootstrap/cache
+    ```
+
+- **PostgreSQL not connecting?**
+  - Verify `DB_HOST`, `DB_PORT`, `DB_USERNAME`, and `DB_PASSWORD` match `docker-compose.yml`
+
+---
+
+## 📁 Project Structure
+
+```
+├── app/
+├── bootstrap/
+├── config/
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── docker/
+├── public/
+├── resources/
+│   ├── css/
+│   ├── js/
+│   └── views/
+├── routes/
+├── storage/
+├── tests/
+├── .env
+├── Dockerfile
+├── docker-compose.yml
+└── vite.config.js
+```
+
+---
+
+## 📜 License
+
+This project is open-source and licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+---
+
+## 🌱 Database Seeding
+
+To populate your database with sample data, you can use Laravel seeders.
+
+1. Create a seeder:
+```bash
+php artisan make:seeder UserSeeder
+```
+
+2. Define dummy users or roles in `database/seeders/UserSeeder.php`:
+```php
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+
+public function run()
+{
+    $adminRole = Role::firstOrCreate(['name' => 'Administrator']);
+
+    $user = User::create([
+        'name' => 'Admin User',
+        'email' => 'admin@example.com',
+        'password' => bcrypt('password'),
+    ]);
+
+    $user->assignRole($adminRole);
+}
+```
+
+3. Run seeders:
+```bash
+php artisan db:seed --class=UserSeeder
+```
+
+---
+
+## 🚀 Deployment Tips
+
+- Set `APP_ENV=production` and `APP_DEBUG=false` in your `.env` file.
+- Build frontend assets:
+```bash
+npm run build
+```
+- Set correct permissions:
+```bash
+chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+```
+- Run optimizations:
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+- Use a process manager like **Supervisor** or **systemd** to run `php artisan queue:work` in production (if using queues).
+
+---
+
+## ✅ Testing
+
+Laravel includes PHPUnit for automated testing.
+
+Run all tests:
+```bash
+php artisan test
+```
+
+Create a test:
+```bash
+php artisan make:test ExampleTest
+```
+
+Test files are located in the `tests/Feature` and `tests/Unit` directories.
